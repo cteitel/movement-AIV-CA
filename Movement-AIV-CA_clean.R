@@ -338,7 +338,7 @@ samp_size_mig <- plot_dats_mig %>% bind_rows(mod_dats_mig %>% mutate(doy_start =
   left_join(plot_dats_mig %>% group_by(species,type_name, status) %>% summarize(n = n())) 
 
 
-plot_mig = ggplot(plot_dats_mig, aes(x = status, y = doy_start, color = status)) +
+plot_mig = ggplot(plot_dats_mig, aes(x = status, y = doy_start, color = status, shape = status)) +
   geom_point(alpha = 0.3, position = position_jitter(width = 0.08, seed = 2)) +
   facet_grid(rows = vars(species), cols = vars(type_name), scales = "free_y", switch = "both", 
              labeller = label_wrap_gen(width=20)) +
@@ -374,7 +374,7 @@ samp_size_stop <- plot_dats_stop %>% bind_rows(mod_dats_stop %>% mutate(duration
   group_by(species) %>% summarize(duration = min(duration, na.rm=T)-8) %>%
   left_join(plot_dats_stop %>% group_by(species,type_name, status) %>% summarize(n = n())) 
 
-plot_stop = ggplot(plot_dats_stop, aes(x = status, y = duration, color = status)) +
+plot_stop = ggplot(plot_dats_stop, aes(x = status, y = duration, color = status, shape = status)) +
   geom_point(alpha = 0.3, position = position_jitter(width = 0.08, seed = 12)) +
   facet_grid(rows = vars(species), cols = vars(type_name), scales = "free_y", switch = "x", 
              labeller = label_wrap_gen(width=20)) +
@@ -576,7 +576,7 @@ axis_ticks <- bind_cols(start = axis_bks, end = lead(axis_bks)) %>%
   c() %>% unique()
 axis_labs <- ifelse(axis_ticks %in% axis_bks, axis_ticks, "")
 
-mcp_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = mcp_area, color = active_infection), alpha = 0.7) +
+mcp_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = mcp_area, color = active_infection, shape = active_infection), alpha = 0.7) +
   stat_summary(geom = "line", fun = "mean", position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = "mean_sdl", fun.args = list(mult=1), size = 0.5, position = position_dodge(width = 0.2)) +
   facet_wrap(~species, scales = "free", labeller = labeller(species=species_labels)) + 
@@ -586,6 +586,7 @@ mcp_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = mc
                      labels = axis_labs) + 
   scale_color_manual("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg."),
                      values = RColorBrewer::brewer.pal(3,"Dark2")[2:1]) +
+  scale_shape("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg.")) +
   theme(axis.ticks.y = element_line(size = 0.4))
 
 mcp_plot_raw +
@@ -593,7 +594,7 @@ mcp_plot_raw +
 
 
 #### plots for other movement metrics, fig.width=8, fig.height=3.5}
-max_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = max_dist/1000, color = active_infection), alpha = 0.7) +
+max_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = max_dist/1000, color = active_infection, shape = active_infection), alpha = 0.7) +
   stat_summary(geom = "line", fun = "mean", position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = "mean_sdl", fun.args = list(mult=1), size = 0.5, position = position_dodge(width = 0.2)) +
   facet_wrap(~species, scales = "free", labeller = labeller(species=species_labels)) + 
@@ -603,10 +604,11 @@ max_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y
                      labels = axis_labs) + 
   scale_color_manual("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg."),
                      values = RColorBrewer::brewer.pal(3,"Dark2")[2:1]) +
+  scale_shape("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg.")) +
   theme(axis.ticks.y = element_line(size = 0.4))
 max_dist_plot_raw
 
-total_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = total_dist/1000, color = active_infection), alpha = 0.7) +
+total_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling, y = total_dist/1000, color = active_infection, shape = active_infection), alpha = 0.7) +
   stat_summary(geom = "line", fun = "mean", position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = "mean_sdl", fun.args = list(mult=1), size = 0.5, position = position_dodge(width = 0.2)) +
   facet_wrap(~species, scales = "free", labeller = labeller(species=species_labels)) + 
@@ -616,6 +618,7 @@ total_dist_plot_raw <- ggplot(dats_mcp_between_pcr, aes(x = time_since_sampling,
                      labels = axis_labs) + 
   scale_color_manual("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg."),
                      values = RColorBrewer::brewer.pal(3,"Dark2")[2:1]) +
+  scale_shape("Active infection\nstatus (rRT-PCR)", breaks = c(T,F), labels = c("Pos.","Neg.")) +
   theme(axis.ticks.y = element_line(size = 0.4))
 total_dist_plot_raw
 
